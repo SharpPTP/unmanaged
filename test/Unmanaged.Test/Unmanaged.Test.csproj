@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<AssemblyTitle>Unmanaged.Test</AssemblyTitle>
+		<TargetFramework>netcoreapp2.0</TargetFramework>
+		<Authors>Petar Petrov and contributors</Authors>
+		<AssemblyName>Unmanaged.Test</AssemblyName>
+		<IsPackable>false</IsPackable>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/SharpPTP/unmanaged</RepositoryUrl>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+		<PackageReference Include="xunit" Version="2.3.1" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+		<DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\Unmanaged\Unmanaged.csproj" />
+	</ItemGroup>
+
+</Project>
