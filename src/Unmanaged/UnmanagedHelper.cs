@@ -7,16 +7,25 @@
 
 	internal static class UnmanagedHelper
 	{
-		public static bool TryGetFunction(FieldInfo field, Expression<Func<object>> onFunctionCall, out Delegate @delegate)
+		public static bool TryGetFunction(
+			FieldInfo field,
+			Func<string, IntPtr> methodHandleFactory,
+			Expression<Func<object>> onFunctionCall,
+			out Delegate @delegate)
 		{
 			if (field == null)
 			{
 				throw new ArgumentNullException(nameof(field));
 			}
 
+			if (methodHandleFactory == null)
+			{
+				throw new ArgumentNullException(nameof(methodHandleFactory));
+			}
+
 			LoadFunctionAttribute attribute = field.GetCustomAttribute<LoadFunctionAttribute>();
 
-			IntPtr methodHandle = attribute.GetFunctionPointer.Invoke(attribute.EntryPoint);
+			IntPtr methodHandle = methodHandleFactory.Invoke(attribute.EntryPoint);
 
 			if (methodHandle == IntPtr.Zero && onFunctionCall != null)
 			{
@@ -34,16 +43,24 @@
 			return true;
 		}
 
-		public static bool TryGetFunction(FieldInfo field, out Delegate @delegate)
+		public static bool TryGetFunction(
+			FieldInfo field,
+			Func<string, IntPtr> methodHandleFactory,
+			out Delegate @delegate)
 		{
 			if (field == null)
 			{
 				throw new ArgumentNullException(nameof(field));
 			}
 
+			if (methodHandleFactory == null)
+			{
+				throw new ArgumentNullException(nameof(methodHandleFactory));
+			}
+
 			LoadFunctionAttribute attribute = field.GetCustomAttribute<LoadFunctionAttribute>();
 
-			IntPtr methodHandle = attribute.GetFunctionPointer.Invoke(attribute.EntryPoint);
+			IntPtr methodHandle = methodHandleFactory.Invoke(attribute.EntryPoint);
 
 			if (methodHandle != IntPtr.Zero)
 			{

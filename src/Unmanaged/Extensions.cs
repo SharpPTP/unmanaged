@@ -34,13 +34,21 @@
 		/// Loads all unmanaged functions of provided type.
 		/// </summary>
 		/// <param name="type">The type</param>
+		/// <param name="methodHandleFactory">The function that retrieves the handle</param>
 		/// <param name="onFunctionCall">The on function call event</param>
 		/// <returns>returns a collection of error string</returns>
-		public static ICollection<string> LoadFunctions(this Type type, Action<string, bool> onFunctionCall)
+		public static ICollection<string> LoadFunctions(this Type type,
+			Func<string, IntPtr> methodHandleFactory,
+			Action<string, bool> onFunctionCall)
 		{
 			if (type == null)
 			{
 				throw new ArgumentNullException(nameof(type));
+			}
+
+			if (methodHandleFactory == null)
+			{
+				throw new ArgumentNullException(nameof(methodHandleFactory));
 			}
 
 			if (onFunctionCall == null)
@@ -58,7 +66,7 @@
 
 			foreach (FieldInfo field in fields)
 			{
-				if (!UnmanagedHelper.TryGetFunction(field, expression, out Delegate @delegate))
+				if (!UnmanagedHelper.TryGetFunction(field, methodHandleFactory, expression, out Delegate @delegate))
 				{
 					LoadFunctionAttribute attribute = field.GetCustomAttribute<LoadFunctionAttribute>();
 
@@ -75,12 +83,20 @@
 		/// Loads all unmanaged functions of provided type and binding flags.
 		/// </summary>
 		/// <param name="type">The type</param>
+		/// <param name="methodHandleFactory">The function that retrieves the handle</param>
 		/// <returns>returns a collection of error string</returns>
-		public static ICollection<string> LoadFunctions(this Type type)
+		public static ICollection<string> LoadFunctions(
+			this Type type,
+			Func<string, IntPtr> methodHandleFactory)
 		{
 			if (type == null)
 			{
 				throw new ArgumentNullException(nameof(type));
+			}
+
+			if (methodHandleFactory == null)
+			{
+				throw new ArgumentNullException(nameof(methodHandleFactory));
 			}
 
 			var errors = new List<string>();
@@ -91,7 +107,7 @@
 
 			foreach (FieldInfo field in fields)
 			{
-				if (!UnmanagedHelper.TryGetFunction(field, out Delegate @delegate))
+				if (!UnmanagedHelper.TryGetFunction(field, methodHandleFactory, out Delegate @delegate))
 				{
 					LoadFunctionAttribute attribute = field.GetCustomAttribute<LoadFunctionAttribute>();
 
