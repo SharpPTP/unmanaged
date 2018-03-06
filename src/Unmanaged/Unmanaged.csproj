@@ -7,6 +7,7 @@
 		<TargetFrameworks>netstandard2.0</TargetFrameworks>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<AssemblyName>Unmanaged</AssemblyName>
+		<Version>1.0.1</Version>
 		<PackageId>Unmanaged</PackageId>
 		<PackageTags>Unmanaged Native Library Reflection Delegate Core</PackageTags>
 		<PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>

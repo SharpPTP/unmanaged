@@ -9,14 +9,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{2B73FD2E-8
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{93617D01-6FCE-4104-9BD6-D637FB304995}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		Deploy.ps1 = Deploy.ps1
+		nuget.config = nuget.config
 		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unmanaged", "src\Unmanaged\Unmanaged.csproj", "{551811AF-6551-45FF-B022-8EE741F6387A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unmanaged.Test", "test\Unmanaged.Test\Unmanaged.Test.csproj", "{B498DA15-A892-4EA2-91EF-E960A9C8D9E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unmanaged.Test", "test\Unmanaged.Test\Unmanaged.Test.csproj", "{B498DA15-A892-4EA2-91EF-E960A9C8D9E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
