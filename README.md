@@ -7,7 +7,8 @@
 
 ------------------------------------
 
-[![Build Status](https://travis-ci.org/SharpPTP/unmanaged.svg?branch=master)](https://travis-ci.org/SharpPTP/unmanaged)
+Linux: [![Build Status](https://travis-ci.org/SharpPTP/unmanaged.svg?branch=master)](https://travis-ci.org/SharpPTP/unmanaged)
+Windows: [![Build status](https://ci.appveyor.com/api/projects/status/d6n5dnvukkrrsli7?svg=true)](https://ci.appveyor.com/project/petarpetrovt/unmanaged)
 
 `Nuget-package:`
 <a href="https://www.nuget.org/packages/Unmanaged">
