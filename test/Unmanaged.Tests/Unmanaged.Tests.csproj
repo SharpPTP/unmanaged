@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<AssemblyTitle>Unmanaged.Test</AssemblyTitle>
 		<TargetFramework>netcoreapp2.0</TargetFramework>
-		<Authors>Petar Petrov and contributors</Authors>
+		<AssemblyTitle>Unmanaged.Test</AssemblyTitle>
 		<AssemblyName>Unmanaged.Test</AssemblyName>
+		<Authors>Petar Petrov and contributors</Authors>
 		<IsPackable>false</IsPackable>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/SharpPTP/unmanaged</RepositoryUrl>
@@ -20,10 +20,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\src\Unmanaged\Unmanaged.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
 	</ItemGroup>
 
 </Project>

@@ -1,13 +1,14 @@
-namespace Unmanaged.Test
+namespace Unmanaged.Tests
 {
 	using System;
+	using Unmanaged.Tests.Platforms;
 	using Xunit;
 
 	public class NativeLibraryTest
 	{
 		[Theory]
-		[InlineData("kernel32.dll", "libdl.so")]
-		[InlineData("opengl32.dll", "libgl.so")]
+		[InlineData("kernel32.dll", "libGL")]
+		[InlineData("opengl32.dll", "libGL")]
 		public void Test_NativeLibrary_Load(string windowsLibrary, string unixLibrary)
 		{
 			using (new NativeLibrary(windowsLibrary, unixLibrary))
@@ -17,16 +18,16 @@ namespace Unmanaged.Test
 
 		[Theory]
 		[InlineData("randomasdasdas.dll", "randomasdasdas.so")]
+		[InlineData("randomasdasdas.so", "randomasdasdas.dll")]
 		public void Test_NativeLibrary_NotFound(string windowsLibrary, string unixLibrary)
 		{
 			Assert.Throws<DllNotFoundException>(() => new NativeLibrary(windowsLibrary, unixLibrary));
 		}
 
-		[Theory]
+		[PlatformSpecificTheory(Platform.Windows)]
 		[InlineData("kernel32.dll", "GetTickCount")]
 		[InlineData("kernel32.dll", "GetProcAddress")]
 		[InlineData("kernel32.dll", "FreeLibrary")]
-		// TODO: [PlatformSpesific(OSPlatform.Windows)]
 		public void Test_NativeLibrary_GetAddress(string windowsLibrary, string entryPoint)
 		{
 			using (var lib = new NativeLibrary(windowsLibrary))
@@ -37,11 +38,10 @@ namespace Unmanaged.Test
 			}
 		}
 
-		[Theory]
+		[PlatformSpecificTheory(Platform.Windows)]
 		[InlineData("kernel32.dll", "GetTickCount", typeof(GetTickCount))]
 		[InlineData("kernel32.dll", "GetProcAddress", typeof(GetProcAddress))]
 		[InlineData("kernel32.dll", "FreeLibrary", typeof(FreeLibrary))]
-		// TODO: [PlatformSpesific(OSPlatform.Windows)]
 		public void Test_NativeLibrary_GetDelegate(string windowsLibrary, string entryPoint, Type delegateType)
 		{
 			using (var lib = new NativeLibrary(windowsLibrary))
@@ -52,8 +52,7 @@ namespace Unmanaged.Test
 			}
 		}
 
-		[Fact]
-		// TODO: [PlatformSpesific(OSPlatform.Windows)]
+		[PlatformSpecificFact(Platform.Windows)]
 		public void Test_NativeLibrary_GetDelegateGeneric()
 		{
 			using (var lib = new NativeLibrary("kernel32.dll"))
@@ -65,7 +64,6 @@ namespace Unmanaged.Test
 				Assert.NotNull(@delegate1);
 			}
 		}
-
 
 		#region Delegates
 
