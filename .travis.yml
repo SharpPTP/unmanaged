@@ -6,4 +6,4 @@ mono: none
 dotnet: 2.1.4
 script:
   - dotnet restore
-  - dotnet test test/Unmanaged.Test/Unmanaged.Test.csproj -c Release -f "netcoreapp2.0"
+  - dotnet test tests/Unmanaged.Tests/Unmanaged.Tests.csproj -c Release -f "netcoreapp2.0"
