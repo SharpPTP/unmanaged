@@ -14,7 +14,7 @@
 		public PlatformSpecificFactAttribute(Platform platform)
 		{
 			Skip = !IsOSPlatform(platform)
-				? $"Test is platform specific, will run on `{platform}`."
+				? $"Test is `{platform}` platform specific."
 				: null;
 		}
 
