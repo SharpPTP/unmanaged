@@ -1,19 +1,19 @@
 ## .NET Standard library for working with unmanaged code
 
- - `NativeLibrary`
- - `LoadFunctionAttribute`
+* `NativeLibrary`
+* `LoadFunctionAttribute`
 
 ### Build Status
 
-|             |Build Status|
-|-------------|:----------:|
-|**Linux/Mac**|[![Build Status](https://travis-ci.org/SharpPTP/unmanaged.svg?branch=master)](https://travis-ci.org/SharpPTP/unmanaged)|
-|**Windows**  |[![Build Status](https://ci.appveyor.com/api/projects/status/d6n5dnvukkrrsli7?svg=true)](https://ci.appveyor.com/project/petarpetrovt/unmanaged)|
+|               |                                                                   Build Status                                                                   |
+| ------------- | :----------------------------------------------------------------------------------------------------------------------------------------------: |
+| **Linux/Mac** |             [![Build Status](https://travis-ci.org/SharpPTP/unmanaged.svg?branch=master)](https://travis-ci.org/SharpPTP/unmanaged)              |
+| **Windows**   | [![Build Status](https://ci.appveyor.com/api/projects/status/d6n5dnvukkrrsli7?svg=true)](https://ci.appveyor.com/project/petarpetrovt/unmanaged) |
 
 ### Installation
 
-| Package Name  | Release (NuGet) |
-|---------------|-----------------|
+| Package Name  | Release (NuGet)                                                                                     |
+| ------------- | --------------------------------------------------------------------------------------------------- |
 | **Unmanaged** | [![NuGet](https://img.shields.io/nuget/v/Unmanaged.svg)](https://www.nuget.org/packages/Unmanaged/) |
 
 ### API
@@ -56,4 +56,4 @@ Run `deploy.cmd`, `deploy.ps1`, or `deploy.sh`.
 
 ### Team
 
- * Petar Petrov
+* Petar Petrov
