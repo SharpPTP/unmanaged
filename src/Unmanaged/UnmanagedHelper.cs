@@ -34,9 +34,8 @@
 			}
 			else if (!attribute.DisableOnFunctionCall)
 			{
-				// TODO:
-				//	@delegate = ptr.GetDebugDelegate(field.FieldType, onFunctionCall);
-				//	return true;
+				//@delegate = methodHandle.GetDebugDelegate(field.FieldType, onFunctionCall);
+				//return true;
 			}
 
 			@delegate = Marshal.GetDelegateForFunctionPointer(methodHandle, field.FieldType);

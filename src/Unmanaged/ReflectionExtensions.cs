@@ -173,51 +173,52 @@
 		/// Constructs a DEBUG delegate by type and expression.
 		/// </summary>
 		/// <param name="ptr">the delegate handle</param>
-		/// <param name="delType">the delegate type</param>
+		/// <param name="delegateType">the delegate type</param>
 		/// <param name="expression">the expression</param>
 		/// <returns>returns a <see cref="Delegate"/> of the same type</returns>
-		public static Delegate GetDebugDelegate(this IntPtr ptr, Type delType, Expression<Func<object>> expression)
+		public static Delegate GetDebugDelegate(this IntPtr ptr, Type delegateType, Expression<Func<object>> expression)
 		{
-			throw new NotImplementedException("corefx active issue -> https://github.com/dotnet/corefx/issues/9800");
+			MethodInfo methodInfo = delegateType.GetInvokeMethod();
 
-			//MethodInfo methodInfo = delType.GetInvokeMethod();
+			Type returnType = methodInfo.ReturnType;
+			Type returnPointerType = returnType.GetPointerType();
+			ParameterInfo[] parameters = methodInfo.GetParameters();
 
-			//Type returnType = methodInfo.ReturnType;
-			//Type returnPointerType = returnType.GetPointerType();
-			//ParameterInfo[] parameters = methodInfo.GetParameters();
+			var dm = new DynamicMethod($"{delegateType.Name}Calli", returnType, parameters.GetTypes(), delegateType, true);
 
-			//var dm = new DynamicMethod($"{delType.Name}Calli", returnType, parameters.GetTypes(), delType, true);
+			ILGenerator il = dm.GetILGenerator();
 
-			//ILGenerator il = dm.GetILGenerator();
+			bool hasReturnType = returnType != typeof(void);
+			LocalBuilder local = hasReturnType
+				? il.DeclareLocal(returnType)
+				: null;
 
-			//bool hasReturnType = returnType != typeof(void);
-			//LocalBuilder local = hasReturnType
-			//	? il.DeclareLocal(returnType)
-			//	: null;
+			for (int i = 0; i < parameters.Length; i++)
+			{
+				il.Emit(OpCodes.Ldarg, i);
+			}
 
-			//for (int i = 0; i < parameters.Length; i++)
-			//	il.Emit(OpCodes.Ldarg, i);
+			il.EmitMethodHandle(ptr);
+			//il.EmitCalli(OpCodes.Calli, CallingConvention.Cdecl, returnPointerType, parameters.GetTypes());
 
-			//il.EmitMethodPointer(ptr);
-			////TODO: corefx active issue -> https://github.com/dotnet/corefx/issues/9800
-			////il.EmitCalli(OpCodes.Calli, CallingConvention.Cdecl, returnPointerType, parameters.GetTypes()); // true
+			if (hasReturnType)
+			{
+				il.Emit(OpCodes.Stloc, local);
+			}
 
-			//if (hasReturnType)
-			//{
-			//	il.Emit(OpCodes.Stloc, local);
-			//}
+			il.EmitExpressionCall(expression, out MethodInfo expressionInfo);
+			il.Emit(OpCodes.Ldstr, delegateType.Name);
+			il.Emit(OpCodes.Ldc_I4_1);
+			il.Emit(OpCodes.Callvirt, expressionInfo);
 
-			//il.Emit(OpCodes.Ldstr, delType.Name);
-			////il.Emit(OpCodes.Call, logMethodInfo);
+			if (hasReturnType)
+			{
+				il.Emit(OpCodes.Ldloc, local);
+			}
 
-			//if (hasReturnType)
-			//{
-			//	il.Emit(OpCodes.Ldloc, local);
-			//}
+			il.Emit(OpCodes.Ret);
 
-			//il.Emit(OpCodes.Ret);
-
-			//return dm.CreateDelegate(delType);
+			return dm.CreateDelegate(delegateType);
 		}
 	}
 }
