@@ -3,7 +3,7 @@
 	using System;
 	using System.Runtime.InteropServices;
 
-	internal partial class Kernel32
+	internal static class Kernel32
 	{
 		private const string DLL_NAME = "kernel32.dll";
 

@@ -1,8 +1,8 @@
 namespace Unmanaged.Tests
 {
 	using System;
-	using Unmanaged.Tests.Platforms;
 	using Xunit;
+	using XUnit;
 
 	public class NativeLibraryTest
 	{

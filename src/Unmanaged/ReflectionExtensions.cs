@@ -5,6 +5,7 @@
 	using System.Linq.Expressions;
 	using System.Reflection;
 	using System.Reflection.Emit;
+	using System.Runtime.InteropServices;
 
 	/// <summary>
 	/// Provides extensions methods for reflection.
@@ -123,13 +124,19 @@
 
 					il.Emit(OpCodes.Ldsfld, fieldInfo);
 				}
+				else
+				{
+					invoke = null;
+				}
 			}
-
-			invoke = null;
+			else
+			{
+				invoke = null;
+			}
 		}
 
 		/// <summary>
-		/// Constructs a empty delegate by type and expression.
+		/// Constructs a empty DEBUG delegate by type and expression.
 		/// </summary>
 		/// <param name="delegateType">The delegate type.</param>
 		/// <param name="expression">The expression.</param>
@@ -199,7 +206,7 @@
 			}
 
 			il.EmitMethodHandle(ptr);
-			//il.EmitCalli(OpCodes.Calli, CallingConvention.Cdecl, returnPointerType, parameters.GetTypes());
+			il.EmitCalli(OpCodes.Calli, CallingConvention.Cdecl, returnPointerType, parameters.GetTypes());
 
 			if (hasReturnType)
 			{

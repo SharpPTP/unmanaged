@@ -2,7 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
-	using Unmanaged.Tests.Platforms;
+	using Unmanaged.XUnit;
 	using Xunit;
 
 	public class LoadFunctionsTest

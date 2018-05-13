@@ -9,8 +9,8 @@
 	{
 		public static bool TryGetFunction(
 			FieldInfo field,
-			Func<string, IntPtr> methodHandleFactory,
-			Expression<Func<object>> onFunctionCall,
+			Func<string, IntPtr> handleFactory,
+			Expression<Func<object>> callback,
 			out Delegate @delegate)
 		{
 			if (field == null)
@@ -18,24 +18,24 @@
 				throw new ArgumentNullException(nameof(field));
 			}
 
-			if (methodHandleFactory == null)
+			if (handleFactory == null)
 			{
-				throw new ArgumentNullException(nameof(methodHandleFactory));
+				throw new ArgumentNullException(nameof(handleFactory));
 			}
 
 			LoadFunctionAttribute attribute = field.GetCustomAttribute<LoadFunctionAttribute>();
 
-			IntPtr methodHandle = methodHandleFactory.Invoke(attribute.EntryPoint);
+			IntPtr methodHandle = handleFactory.Invoke(attribute.EntryPoint);
 
-			if (methodHandle == IntPtr.Zero && onFunctionCall != null)
+			if (methodHandle == IntPtr.Zero && callback != null)
 			{
-				@delegate = field.FieldType.GetEmptyDebugDelegate(onFunctionCall);
+				@delegate = field.FieldType.GetEmptyDebugDelegate(callback);
 				return false;
 			}
 			else if (!attribute.DisableOnFunctionCall)
 			{
-				//@delegate = methodHandle.GetDebugDelegate(field.FieldType, onFunctionCall);
-				//return true;
+				@delegate = methodHandle.GetDebugDelegate(field.FieldType, callback);
+				return true;
 			}
 
 			@delegate = Marshal.GetDelegateForFunctionPointer(methodHandle, field.FieldType);
@@ -44,7 +44,7 @@
 
 		public static bool TryGetFunction(
 			FieldInfo field,
-			Func<string, IntPtr> methodHandleFactory,
+			Func<string, IntPtr> handleFactory,
 			out Delegate @delegate)
 		{
 			if (field == null)
@@ -52,14 +52,14 @@
 				throw new ArgumentNullException(nameof(field));
 			}
 
-			if (methodHandleFactory == null)
+			if (handleFactory == null)
 			{
-				throw new ArgumentNullException(nameof(methodHandleFactory));
+				throw new ArgumentNullException(nameof(handleFactory));
 			}
 
 			LoadFunctionAttribute attribute = field.GetCustomAttribute<LoadFunctionAttribute>();
 
-			IntPtr methodHandle = methodHandleFactory.Invoke(attribute.EntryPoint);
+			IntPtr methodHandle = handleFactory.Invoke(attribute.EntryPoint);
 
 			if (methodHandle != IntPtr.Zero)
 			{

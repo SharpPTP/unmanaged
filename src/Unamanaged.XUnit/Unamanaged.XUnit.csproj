@@ -1,15 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Description>A cross-platform library for working with unmanaged assemblies; written in C#</Description>
-		<AssemblyTitle>Unmanaged</AssemblyTitle>
+		<Description>xUnit extension library; written in C#</Description>
+		<AssemblyTitle>Unmanaged.XUnit</AssemblyTitle>
 		<Authors>Petar Petrov and contributors</Authors>
 		<TargetFramework>netcoreapp2.1</TargetFramework>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<AssemblyName>Unmanaged</AssemblyName>
+		<AssemblyName>Unmanaged.XUnit</AssemblyName>
 		<Version>1.0.1</Version>
-		<PackageId>Unmanaged</PackageId>
-		<PackageTags>Unmanaged Native Library Reflection Delegate Core</PackageTags>
+		<PackageId>Unmanaged.XUnit</PackageId>
+		<PackageTags>Unmanaged XUnit</PackageTags>
 		<PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/SharpPTP/unmanaged</RepositoryUrl>
@@ -26,7 +26,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.3.0" />
+		<PackageReference Include="xunit" Version="2.3.1" />
 	</ItemGroup>
 
 </Project>
