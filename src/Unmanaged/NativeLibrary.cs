@@ -42,16 +42,6 @@
 		}
 
 		/// <summary>
-		/// Initializes the <see cref="NativeLibrary"/> instance.
-		/// </summary>
-		/// <param name="winLibraryName">Windows DLL name</param>
-		/// <param name="unixLibraryName">UNIX SO name</param>
-		public NativeLibrary(string winLibraryName, string unixLibraryName)
-			: this(RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? winLibraryName : unixLibraryName)
-		{
-		}
-
-		/// <summary>
 		/// Destroys the object.
 		/// </summary>
 		~NativeLibrary()

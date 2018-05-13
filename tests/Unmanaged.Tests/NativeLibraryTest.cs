@@ -6,23 +6,30 @@ namespace Unmanaged.Tests
 
 	public class NativeLibraryTest
 	{
-		[Theory]
-		[InlineData("kernel32.dll", "libdl.so")]
-		// TODO: investigate libGL.so missing
-		//[InlineData("opengl32.dll", "libGL.so")]
-		public void Test_NativeLibrary_Load(string windowsLibrary, string unixLibrary)
+		[PlatformSpecificTheory(Platform.Windows)]
+		[InlineData("kernel32.dll")]
+		public void Test_NativeLibrary_Load_Windows(string library)
 		{
-			using (new NativeLibrary(windowsLibrary, unixLibrary))
+			using (new NativeLibrary(library))
+			{
+			}
+		}
+
+		[PlatformSpecificTheory(Platform.Unix)]
+		[InlineData("libdl.so")]
+		public void Test_NativeLibrary_Load_Unix(string library)
+		{
+			using (new NativeLibrary(library))
 			{
 			}
 		}
 
 		[Theory]
-		[InlineData("randomasdasdas.dll", "randomasdasdas.so")]
-		[InlineData("randomasdasdas.so", "randomasdasdas.dll")]
-		public void Test_NativeLibrary_NotFound(string windowsLibrary, string unixLibrary)
+		[InlineData("randomasdasdas.dll")]
+		[InlineData("randomasdasdas.so")]
+		public void Test_NativeLibrary_NotFound(string library)
 		{
-			Assert.Throws<DllNotFoundException>(() => new NativeLibrary(windowsLibrary, unixLibrary));
+			Assert.Throws<DllNotFoundException>(() => new NativeLibrary(library));
 		}
 
 		[PlatformSpecificTheory(Platform.Windows)]

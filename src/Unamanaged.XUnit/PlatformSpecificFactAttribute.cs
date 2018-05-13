@@ -33,12 +33,15 @@
 		{
 			switch (platform)
 			{
+				case Platform.Unix:
+					return RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
+						|| RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+				case Platform.Windows:
+					return RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 				case Platform.Linux:
 					return RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 				case Platform.OSX:
 					return RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
-				case Platform.Windows:
-					return RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 				default:
 					throw new ArgumentException($"Unsupported platform `{platform}`.");
 			}
