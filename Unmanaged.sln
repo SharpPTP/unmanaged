@@ -12,7 +12,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		.travis.yml = .travis.yml
+		appveyor.yml = appveyor.yml
+		deploy.cmd = deploy.cmd
 		Deploy.ps1 = Deploy.ps1
+		LICENSE = LICENSE
 		nuget.config = nuget.config
 		README.md = README.md
 	EndProjectSection
@@ -21,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unmanaged", "src\Unmanaged\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unmanaged.Tests", "tests\Unmanaged.Tests\Unmanaged.Tests.csproj", "{3A4F0B3F-626B-46F6-BBF5-58D2E969CB8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unamanaged.XUnit", "src\Unamanaged.XUnit\Unamanaged.XUnit.csproj", "{D0E5218F-2E50-4535-AB68-6E99B1164A89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unmanaged.XUnit", "src\Unmanaged.XUnit\Unmanaged.XUnit.csproj", "{D0E5218F-2E50-4535-AB68-6E99B1164A89}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

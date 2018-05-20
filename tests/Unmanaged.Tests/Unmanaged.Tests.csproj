@@ -19,7 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\src\Unamanaged.XUnit\Unamanaged.XUnit.csproj" />
+		<ProjectReference Include="..\..\src\Unmanaged.XUnit\Unmanaged.XUnit.csproj" />
 		<ProjectReference Include="..\..\src\Unmanaged\Unmanaged.csproj" />
 	</ItemGroup>
 
