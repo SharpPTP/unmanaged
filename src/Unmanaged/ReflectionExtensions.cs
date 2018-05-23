@@ -98,7 +98,7 @@
 		/// <param name="il">the IL generator</param>
 		/// <param name="expression">the expression</param>
 		/// <param name="invoke">the expression method info</param>
-		public static void EmitExpressionCall(this ILGenerator il, Expression<Func<object>> expression, out MethodInfo invoke)
+		public static bool EmitExpressionCall(this ILGenerator il, Expression<Func<UnmanagedCallback>> expression, out MethodInfo invoke)
 		{
 			if (il == null)
 			{
@@ -114,24 +114,36 @@
 			{
 				if (body.Member is PropertyInfo propertyInfo)
 				{
+					// TODO: ensure static
+
 					invoke = propertyInfo.PropertyType.GetInvokeMethod();
 
 					il.Emit(OpCodes.Call, propertyInfo.GetGetMethod());
+
+					return true;
 				}
 				else if (body.Member is FieldInfo fieldInfo)
 				{
+					// TODO: ensure static
+
 					invoke = fieldInfo.FieldType.GetInvokeMethod();
 
 					il.Emit(OpCodes.Ldsfld, fieldInfo);
+
+					return true;
 				}
 				else
 				{
 					invoke = null;
+
+					return false;
 				}
 			}
 			else
 			{
 				invoke = null;
+
+				return false;
 			}
 		}
 
@@ -139,9 +151,9 @@
 		/// Constructs a empty DEBUG delegate by type and expression.
 		/// </summary>
 		/// <param name="delegateType">The delegate type.</param>
-		/// <param name="expression">The expression.</param>
+		/// <param name="expression">The expression</param>
 		/// <returns>returns a <see cref="Delegate"/> of the same type</returns>
-		public static Delegate GetEmptyDebugDelegate(this Type delegateType, Expression<Func<object>> expression)
+		public static Delegate GetEmptyDebugDelegate(this Type delegateType, Expression<Func<UnmanagedCallback>> expression)
 		{
 			if (delegateType == null)
 			{
@@ -161,7 +173,11 @@
 
 			ILGenerator il = method.GetILGenerator();
 
-			il.EmitExpressionCall(expression, out MethodInfo expressionInfo);
+			if (!il.EmitExpressionCall(expression, out MethodInfo expressionInfo))
+			{
+				throw new Exception("Invalid expression.");
+			}
+
 			il.Emit(OpCodes.Ldstr, delegateType.Name);
 			il.Emit(OpCodes.Ldc_I4_1);
 			il.Emit(OpCodes.Callvirt, expressionInfo);
@@ -183,8 +199,18 @@
 		/// <param name="delegateType">the delegate type</param>
 		/// <param name="expression">the expression</param>
 		/// <returns>returns a <see cref="Delegate"/> of the same type</returns>
-		public static Delegate GetDebugDelegate(this IntPtr ptr, Type delegateType, Expression<Func<object>> expression)
+		public static Delegate GetDebugDelegate(this IntPtr ptr, Type delegateType, Expression<Func<UnmanagedCallback>> expression)
 		{
+			if (delegateType == null)
+			{
+				throw new ArgumentNullException(nameof(delegateType));
+			}
+
+			if (expression == null)
+			{
+				throw new ArgumentNullException(nameof(expression));
+			}
+
 			MethodInfo methodInfo = delegateType.GetInvokeMethod();
 
 			Type returnType = methodInfo.ReturnType;
@@ -213,7 +239,11 @@
 				il.Emit(OpCodes.Stloc, local);
 			}
 
-			il.EmitExpressionCall(expression, out MethodInfo expressionInfo);
+			if (!il.EmitExpressionCall(expression, out MethodInfo expressionInfo))
+			{
+				throw new Exception("Invalid expression.");
+			}
+
 			il.Emit(OpCodes.Ldstr, delegateType.Name);
 			il.Emit(OpCodes.Ldc_I4_1);
 			il.Emit(OpCodes.Callvirt, expressionInfo);

@@ -10,7 +10,7 @@
 		public static bool TryGetFunction(
 			FieldInfo field,
 			Func<string, IntPtr> handleFactory,
-			Expression<Func<object>> callback,
+			Expression<Func<UnmanagedCallback>> expression,
 			out Delegate @delegate)
 		{
 			if (field == null)
@@ -23,23 +23,30 @@
 				throw new ArgumentNullException(nameof(handleFactory));
 			}
 
+			if (expression == null)
+			{
+				throw new ArgumentNullException(nameof(expression));
+			}
+
 			LoadFunctionAttribute attribute = field.GetCustomAttribute<LoadFunctionAttribute>();
 
 			IntPtr methodHandle = handleFactory.Invoke(attribute.EntryPoint);
 
-			if (methodHandle == IntPtr.Zero && callback != null)
+			if (methodHandle == IntPtr.Zero)
 			{
-				@delegate = field.FieldType.GetEmptyDebugDelegate(callback);
+				@delegate = field.FieldType.GetEmptyDebugDelegate(expression);
 				return false;
 			}
 			else if (!attribute.DisableOnFunctionCall)
 			{
-				@delegate = methodHandle.GetDebugDelegate(field.FieldType, callback);
+				@delegate = methodHandle.GetDebugDelegate(field.FieldType, expression);
 				return true;
 			}
-
-			@delegate = Marshal.GetDelegateForFunctionPointer(methodHandle, field.FieldType);
-			return true;
+			else
+			{
+				@delegate = Marshal.GetDelegateForFunctionPointer(methodHandle, field.FieldType);
+				return true;
+			}
 		}
 
 		public static bool TryGetFunction(

@@ -35,11 +35,11 @@
 		/// </summary>
 		/// <param name="type">The type</param>
 		/// <param name="methodHandleFactory">The function that retrieves the handle</param>
-		/// <param name="onFunctionCall">The on function call event</param>
+		/// <param name="expression">The on function call event</param>
 		/// <returns>returns a collection of error string</returns>
 		public static ICollection<string> LoadFunctions(this Type type,
 			Func<string, IntPtr> methodHandleFactory,
-			Action<string, bool> onFunctionCall)
+			Expression<Func<UnmanagedCallback>> expression)
 		{
 			if (type == null)
 			{
@@ -51,12 +51,10 @@
 				throw new ArgumentNullException(nameof(methodHandleFactory));
 			}
 
-			if (onFunctionCall == null)
+			if (expression == null)
 			{
-				throw new ArgumentNullException(nameof(onFunctionCall));
+				throw new ArgumentNullException(nameof(expression));
 			}
-
-			Expression<Func<object>> expression = () => onFunctionCall;
 
 			var errors = new List<string>();
 

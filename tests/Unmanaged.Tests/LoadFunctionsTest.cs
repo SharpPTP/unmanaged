@@ -28,7 +28,7 @@
 			using (var lib = new NativeLibrary("kernel32.dll"))
 			{
 				ICollection<string> errors = typeof(TestKernel32Wrapper)
-					.LoadFunctions(lib.GetAddress, (s, b) => { });
+					.LoadFunctions(lib.GetAddress, () => Callback);
 
 				Assert.True(errors.Count <= 0);
 				Assert.NotNull(TestKernel32Wrapper.KernelGetProcAddress);
@@ -39,7 +39,10 @@
 
 		#region Nested type: TestClass, Delegates
 
-		public static class TestKernel32Wrapper
+		public static UnmanagedCallback Callback
+			=> (a, b) => { };
+
+		private static class TestKernel32Wrapper
 		{
 			[LoadFunction("GetProcAddress")]
 			public static GetProcAddressDelegate KernelGetProcAddress = null;
@@ -51,11 +54,11 @@
 			public static GetTickCountDelegate KernelGetTickCount = null;
 		}
 
-		public delegate IntPtr GetProcAddressDelegate(IntPtr hModule, string procName);
+		private delegate IntPtr GetProcAddressDelegate(IntPtr hModule, string procName);
 
-		public delegate bool FreeLibraryDelegate(IntPtr hModule);
+		private delegate bool FreeLibraryDelegate(IntPtr hModule);
 
-		public delegate uint GetTickCountDelegate();
+		private delegate uint GetTickCountDelegate();
 
 		#endregion
 	}
