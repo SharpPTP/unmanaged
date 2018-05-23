@@ -245,7 +245,7 @@
 			}
 
 			il.Emit(OpCodes.Ldstr, delegateType.Name);
-			il.Emit(OpCodes.Ldc_I4_1);
+			il.Emit(OpCodes.Ldc_I4_0);
 			il.Emit(OpCodes.Callvirt, expressionInfo);
 
 			if (hasReturnType)

@@ -56,13 +56,46 @@
 			Assert.True(result == default);
 		}
 
+		[Fact]
+		public void Test_GetEmptyDebugDelegate_AssertIsEmpty()
+		{
+			GetTickCountDelegate @delegate = (GetTickCountDelegate)typeof(GetTickCountDelegate)
+				.GetEmptyDebugDelegate(() => CallbackEmptyTrue);
+
+			uint result = @delegate.Invoke();
+
+			Assert.True(result == default);
+		}
+
+		[PlatformSpecificFact(Platform.Windows)]
+		public void Test_GetEmptyDebugDelegate_AssertIsFalse()
+		{
+			using (var lib = new NativeLibrary("kernel32.dll"))
+			{
+				IntPtr methodHandle = lib.GetAddress("GetTickCount");
+
+				GetTickCountDelegate @delegate = (GetTickCountDelegate)methodHandle
+					.GetDebugDelegate(typeof(GetTickCountDelegate), () => CallbackEmptyFalse);
+
+				uint result = @delegate.Invoke();
+
+				Assert.True(result != default);
+			}
+		}
+
 		#region UnmanagedCallbackTestException, GetTickCountDelegate, Callback
 
 		public static UnmanagedCallback CallbackThrows
-			=> (a, b) => throw new UnmanagedCallbackTestException();
+			=> (methodName, isEmpty) => throw new UnmanagedCallbackTestException();
 
 		public static UnmanagedCallback Callback
-			=> (a, b) => { };
+			=> (methodName, isEmpty) => { };
+
+		public static UnmanagedCallback CallbackEmptyTrue
+			=> (methodName, isEmpty) => Assert.True(isEmpty);
+
+		public static UnmanagedCallback CallbackEmptyFalse
+			=> (methodName, isEmpty) => Assert.False(isEmpty);
 
 		private delegate uint GetTickCountDelegate();
 
