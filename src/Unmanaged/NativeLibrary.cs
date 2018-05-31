@@ -1,6 +1,7 @@
 ﻿namespace Unmanaged
 {
 	using System;
+	using System.IO;
 	using System.Runtime.InteropServices;
 	using Unmanaged.Native;
 
@@ -26,18 +27,30 @@
 				throw new ArgumentNullException(nameof(libraryName));
 			}
 
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			// TODO:
+			IPathResolver resolver = new DefaultPathResolver();
+
+			if (Path.IsPathRooted(libraryName))
 			{
-				_handle = Kernel32.LoadLibraryEx(libraryName, IntPtr.Zero, 0);
+				TryLoadLibrary(libraryName, out _handle);
 			}
 			else
 			{
-				_handle = LibDL.LoadLibrary(libraryName, LibDL.RTLD_NOW);
+				foreach (string target in resolver.EnumeratePaths(libraryName))
+				{
+					if (!Path.IsPathRooted(target) || File.Exists(target))
+					{
+						if (TryLoadLibrary(libraryName, out _handle))
+						{
+							break;
+						}
+					}
+				}
 			}
 
 			if (_handle == IntPtr.Zero)
 			{
-				throw new DllNotFoundException($"Failed to load library with name `{libraryName}`.");
+				throw new DllNotFoundException($"Failed to load library `{libraryName}`.");
 			}
 		}
 
@@ -154,5 +167,24 @@
 		}
 
 		#endregion
+
+		private static bool TryLoadLibrary(string libraryName, out IntPtr handle)
+		{
+			if (libraryName == null)
+			{
+				throw new ArgumentNullException(nameof(libraryName));
+			}
+
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			{
+				handle = Kernel32.LoadLibraryEx(libraryName, IntPtr.Zero, 0);
+			}
+			else
+			{
+				handle = LibDL.LoadLibrary(libraryName, LibDL.RTLD_NOW);
+			}
+
+			return handle != IntPtr.Zero;
+		}
 	}
 }
