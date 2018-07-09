@@ -3,7 +3,7 @@
 	using System;
 	using System.Runtime.InteropServices;
 
-	internal static class LibDL
+	internal static class Libdl
 	{
 		private const string SO_NAME = "libdl.so";
 

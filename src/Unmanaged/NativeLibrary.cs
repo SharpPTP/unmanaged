@@ -78,7 +78,7 @@
 			}
 			else
 			{
-				return LibDL.GetProcAddress(_handle, entryPoint);
+				return Libdl.GetProcAddress(_handle, entryPoint);
 			}
 		}
 
@@ -149,7 +149,7 @@
 				}
 				else
 				{
-					LibDL.FreeLibrary(_handle);
+					Libdl.FreeLibrary(_handle);
 				}
 
 				_disposed = true;
@@ -181,7 +181,7 @@
 			}
 			else
 			{
-				handle = LibDL.LoadLibrary(libraryName, LibDL.RTLD_NOW);
+				handle = Libdl.LoadLibrary(libraryName, Libdl.RTLD_NOW);
 			}
 
 			return handle != IntPtr.Zero;

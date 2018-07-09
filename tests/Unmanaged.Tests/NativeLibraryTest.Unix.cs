@@ -46,10 +46,10 @@ namespace Unmanaged.Tests
 		[PlatformSpecificFact(Platform.Unix)]
 		public void Test_NativeLibrary_GetDelegateGeneric_Unix()
 		{
-			using (var lib = new NativeLibrary("kernel32.dll"))
+			using (var lib = new NativeLibrary("libdl.so"))
 			{
-				GetProcAddressUnix @delegate = lib.GetDelegate<GetProcAddressUnix>("GetProcAddress");
-				FreeLibraryUnix @delegate1 = lib.GetDelegate<FreeLibraryUnix>("FreeLibrary");
+				GetProcAddressUnix @delegate = lib.GetDelegate<GetProcAddressUnix>("dlsym");
+				FreeLibraryUnix @delegate1 = lib.GetDelegate<FreeLibraryUnix>("dlclose");
 
 				Assert.NotNull(@delegate);
 				Assert.NotNull(@delegate1);
