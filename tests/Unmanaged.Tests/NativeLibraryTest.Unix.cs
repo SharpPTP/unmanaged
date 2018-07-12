@@ -7,21 +7,19 @@ namespace Unmanaged.Tests
 	public partial class NativeLibraryTest
 	{
 		[PlatformSpecificTheory(Platform.Unix)]
-		[InlineData("libdl.so")]
-		public void Test_NativeLibrary_Load_Unix(string library)
+		[InlineData("libc.so")]
+		public void Test_NativeLibrary_Load_Unix(params string[] libraryNames)
 		{
-			using (new NativeLibrary(library))
+			using (new NativeLibrary(libraryNames))
 			{
 			}
 		}
 
 		[PlatformSpecificTheory(Platform.Unix)]
-		[InlineData("libdl.so", "dlopen")]
-		[InlineData("libdl.so", "dlsym")]
-		[InlineData("libdl.so", "dlclose")]
-		public void Test_NativeLibrary_GetAddress_Unix(string windowsLibrary, string entryPoint)
+		[InlineData(new string[] { "libc.so" }, "getpid")]
+		public void Test_NativeLibrary_GetAddress_Unix(string[] libraryNames, string entryPoint)
 		{
-			using (var lib = new NativeLibrary(windowsLibrary))
+			using (var lib = new NativeLibrary(libraryNames))
 			{
 				IntPtr handle = lib.GetAddress(entryPoint);
 
@@ -30,12 +28,10 @@ namespace Unmanaged.Tests
 		}
 
 		[PlatformSpecificTheory(Platform.Unix)]
-		[InlineData("libdl.so", "dlopen", typeof(LoadLibrary))]
-		[InlineData("libdl.so", "dlsym", typeof(GetProcAddressUnix))]
-		[InlineData("libdl.so", "dlclose", typeof(FreeLibraryUnix))]
-		public void Test_NativeLibrary_GetDelegate_Unix(string windowsLibrary, string entryPoint, Type delegateType)
+		[InlineData(new string[] { "libc.so" }, "getpid", typeof(GetPIDUnix))]
+		public void Test_NativeLibrary_GetDelegate_Unix(string[] libraryNames, string entryPoint, Type delegateType)
 		{
-			using (var lib = new NativeLibrary(windowsLibrary))
+			using (var lib = new NativeLibrary(libraryNames))
 			{
 				Delegate @delegate = lib.GetDelegate(delegateType, entryPoint);
 
@@ -46,25 +42,17 @@ namespace Unmanaged.Tests
 		[PlatformSpecificFact(Platform.Unix)]
 		public void Test_NativeLibrary_GetDelegateGeneric_Unix()
 		{
-			using (var lib = new NativeLibrary("libdl.so"))
+			using (var lib = new NativeLibrary(new string[] { "libc.so" }))
 			{
-				GetProcAddressUnix @delegate = lib.GetDelegate<GetProcAddressUnix>("dlsym");
-				FreeLibraryUnix @delegate1 = lib.GetDelegate<FreeLibraryUnix>("dlclose");
+				GetPIDUnix @delegate = lib.GetDelegate<GetPIDUnix>("getpid");
 
 				Assert.NotNull(@delegate);
-				Assert.NotNull(@delegate1);
 			}
 		}
 
 		#region Delegates
 
-		public const int RTLD_NOW = 2;
-
-		private delegate IntPtr GetProcAddressUnix(IntPtr hModule, string procName);
-
-		private delegate bool FreeLibraryUnix(IntPtr hModule);
-
-		private delegate IntPtr LoadLibrary(string file, int mode);
+		private delegate int GetPIDUnix();
 
 		#endregion
 	}

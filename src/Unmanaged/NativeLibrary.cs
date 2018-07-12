@@ -1,7 +1,7 @@
 ﻿namespace Unmanaged
 {
 	using System;
-	using System.IO;
+	using System.Diagnostics;
 	using System.Runtime.InteropServices;
 	using Unmanaged.Native;
 
@@ -14,7 +14,31 @@
 	public class NativeLibrary : INativeLibrary
 	{
 		private readonly IntPtr _handle;
-		private bool _disposed = false;
+		
+		/// <summary>
+		/// Initializes the <see cref="NativeLibrary"/> instance.
+		/// </summary>
+		/// <param name="libraryNames">the library names</param>
+		public NativeLibrary(string[] libraryNames)
+		{
+			if (libraryNames == null)
+			{
+				throw new ArgumentNullException(nameof(libraryNames));
+			}
+
+			foreach (string libraryName in libraryNames)
+			{
+				if (TryLoadLibrary(libraryName, out _handle))
+				{
+					break;
+				}
+			}
+
+			if (_handle == IntPtr.Zero)
+			{
+				throw new DllNotFoundException($"Failed to load library `{string.Join(", ", libraryNames)}`.");
+			}
+		}
 
 		/// <summary>
 		/// Initializes the <see cref="NativeLibrary"/> instance.
@@ -27,28 +51,7 @@
 				throw new ArgumentNullException(nameof(libraryName));
 			}
 
-			// TODO:
-			IPathResolver resolver = new DefaultPathResolver();
-
-			if (Path.IsPathRooted(libraryName))
-			{
-				TryLoadLibrary(libraryName, out _handle);
-			}
-			else
-			{
-				foreach (string target in resolver.EnumeratePaths(libraryName))
-				{
-					if (!Path.IsPathRooted(target) || File.Exists(target))
-					{
-						if (TryLoadLibrary(libraryName, out _handle))
-						{
-							break;
-						}
-					}
-				}
-			}
-
-			if (_handle == IntPtr.Zero)
+			if (!TryLoadLibrary(libraryName, out _handle))
 			{
 				throw new DllNotFoundException($"Failed to load library `{libraryName}`.");
 			}
@@ -131,6 +134,8 @@
 
 		#region IDisposable Members
 
+		private bool _disposed = false;
+
 		/// <summary>
 		/// Releases the library handle.
 		/// </summary>
@@ -170,10 +175,7 @@
 
 		private static bool TryLoadLibrary(string libraryName, out IntPtr handle)
 		{
-			if (libraryName == null)
-			{
-				throw new ArgumentNullException(nameof(libraryName));
-			}
+			Debug.Assert(libraryName != null);
 
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 			{

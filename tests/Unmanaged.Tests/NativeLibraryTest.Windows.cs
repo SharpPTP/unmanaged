@@ -8,9 +8,9 @@ namespace Unmanaged.Tests
 	{
 		[PlatformSpecificTheory(Platform.Windows)]
 		[InlineData("kernel32.dll")]
-		public void Test_NativeLibrary_Load_Windows(string library)
+		public void Test_NativeLibrary_Load_Windows(params string[] libraryNames)
 		{
-			using (new NativeLibrary(library))
+			using (new NativeLibrary(libraryNames))
 			{
 			}
 		}
