@@ -10,10 +10,10 @@
 		public const int RTLD_NOW = 2;
 
 		[DllImport(SO_NAME, EntryPoint = "dlopen")]
-		public static extern IntPtr LoadLibrary([MarshalAs(UnmanagedType.LPTStr)] string file, int mode);
+		public static extern IntPtr LoadLibrary(string file, int mode);
 
 		[DllImport(SO_NAME, EntryPoint = "dlsym")]
-		public static extern IntPtr GetProcAddress(IntPtr handle, [MarshalAs(UnmanagedType.LPTStr)] string name);
+		public static extern IntPtr GetProcAddress(IntPtr handle, string name);
 
 		[DllImport(SO_NAME, EntryPoint = "dlclose")]
 		public static extern int FreeLibrary(IntPtr handle);

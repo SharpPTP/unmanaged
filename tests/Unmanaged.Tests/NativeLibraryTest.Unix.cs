@@ -7,7 +7,7 @@ namespace Unmanaged.Tests
 	public partial class NativeLibraryTest
 	{
 		[PlatformSpecificTheory(Platform.Unix)]
-		[InlineData("libc.so")]
+		[InlineData("libc.so", "libc.so.6")]
 		public void Test_NativeLibrary_Load_Unix(params string[] libraryNames)
 		{
 			using (new NativeLibrary(libraryNames))
@@ -16,7 +16,7 @@ namespace Unmanaged.Tests
 		}
 
 		[PlatformSpecificTheory(Platform.Unix)]
-		[InlineData(new string[] { "libc.so" }, "getpid")]
+		[InlineData(new string[] { "libc.so", "libc.so.6" }, "getpid")]
 		public void Test_NativeLibrary_GetAddress_Unix(string[] libraryNames, string entryPoint)
 		{
 			using (var lib = new NativeLibrary(libraryNames))
@@ -28,7 +28,7 @@ namespace Unmanaged.Tests
 		}
 
 		[PlatformSpecificTheory(Platform.Unix)]
-		[InlineData(new string[] { "libc.so" }, "getpid", typeof(GetPIDUnix))]
+		[InlineData(new string[] { "libc.so", "libc.so.6" }, "getpid", typeof(GetPIDUnix))]
 		public void Test_NativeLibrary_GetDelegate_Unix(string[] libraryNames, string entryPoint, Type delegateType)
 		{
 			using (var lib = new NativeLibrary(libraryNames))
@@ -42,7 +42,7 @@ namespace Unmanaged.Tests
 		[PlatformSpecificFact(Platform.Unix)]
 		public void Test_NativeLibrary_GetDelegateGeneric_Unix()
 		{
-			using (var lib = new NativeLibrary(new string[] { "libc.so" }))
+			using (var lib = new NativeLibrary(new string[] { "libc.so", "libc.so.6" }))
 			{
 				GetPIDUnix @delegate = lib.GetDelegate<GetPIDUnix>("getpid");
 
