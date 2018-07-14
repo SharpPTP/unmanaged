@@ -1,6 +1,7 @@
 ﻿namespace Unmanaged
 {
 	using System;
+	using System.ComponentModel;
 	using System.Diagnostics;
 	using System.Runtime.InteropServices;
 	using Unmanaged.Native;
@@ -14,7 +15,7 @@
 	public class NativeLibrary : INativeLibrary
 	{
 		private readonly IntPtr _handle;
-		
+
 		/// <summary>
 		/// Initializes the <see cref="NativeLibrary"/> instance.
 		/// </summary>
@@ -180,10 +181,25 @@
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 			{
 				handle = Kernel32.LoadLibraryEx(libraryName, IntPtr.Zero, 0);
+
+				// TODO:
+				if (handle == IntPtr.Zero)
+				{
+					int error = Marshal.GetLastWin32Error();
+					string message = new Win32Exception(error).Message;
+
+					Debug.WriteLine(message);
+				}
 			}
 			else
 			{
 				handle = Libdl.LoadLibrary(libraryName, Libdl.RTLD_NOW);
+
+				// TODO:
+				if (handle == IntPtr.Zero)
+				{
+					Libdl.PrintErrors();
+				}
 			}
 
 			return handle != IntPtr.Zero;
