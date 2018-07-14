@@ -4,6 +4,6 @@ $packagesPath = Join-Path -Path $scriptPath -ChildPath ".deploy\packages"
 
 Write-Host "Clearing deploy folder" | Remove-Item -Recurse -Force $deployPath
 
-Write-Host "Testing" | dotnet test tests/Unmanaged.Tests/Unmanaged.Tests.csproj -c Release
+Write-Host "Testing" | dotnet test test/Unmanaged.Tests/Unmanaged.Tests.csproj -c Release
 
 Write-Host "Deploying nuget packages" | dotnet pack -o $packagesPath
