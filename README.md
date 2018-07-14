@@ -1,7 +1,4 @@
-## .NET Standard library for working with unmanaged code
-
-* `NativeLibrary`
-* `LoadFunctionAttribute`
+## UNMANAGED
 
 ### Build Status
 
