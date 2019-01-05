@@ -1,12 +1,14 @@
 ﻿namespace Unmanaged.Tests
 {
+	using Microsoft.VisualStudio.TestTools.UnitTesting;
 	using System;
-	using Unmanaged.XUnit;
-	using Xunit;
+	using Unmanaged.MSTest;
 
+	[TestClass]
+	[TestCategory("Unmanaged")]
 	public class ReflectionExtensionsTest
 	{
-		[PlatformSpecificFact(Platform.Windows)]
+		[PlatformSpecificTestMethod(Platform.Windows)]
 		public void Test_GetDebugDelegate_Throws()
 		{
 			using (var lib = new NativeLibrary("kernel32.dll"))
@@ -16,11 +18,11 @@
 				GetTickCountDelegate @delegate = (GetTickCountDelegate)methodHandle
 					.GetDebugDelegate(typeof(GetTickCountDelegate), () => CallbackThrows);
 
-				Assert.Throws<UnmanagedCallbackTestException>(() => @delegate.Invoke());
+				Assert.ThrowsException<UnmanagedCallbackTestException>(() => @delegate.Invoke());
 			}
 		}
 
-		[PlatformSpecificFact(Platform.Windows)]
+		[PlatformSpecificTestMethod(Platform.Windows)]
 		public void Test_GetDebugDelegate()
 		{
 			using (var lib = new NativeLibrary("kernel32.dll"))
@@ -32,20 +34,20 @@
 
 				uint result = @delegate.Invoke();
 
-				Assert.True(result != default);
+				Assert.IsTrue(result != default);
 			}
 		}
 
-		[Fact]
+		[TestMethod]
 		public void Test_GetEmptyDebugDelegate_Throws()
 		{
 			GetTickCountDelegate @delegate = (GetTickCountDelegate)typeof(GetTickCountDelegate)
 				.GetEmptyDebugDelegate(() => CallbackThrows);
 
-			Assert.Throws<UnmanagedCallbackTestException>(() => @delegate.Invoke());
+			Assert.ThrowsException<UnmanagedCallbackTestException>(() => @delegate.Invoke());
 		}
 
-		[Fact]
+		[TestMethod]
 		public void Test_GetEmptyDebugDelegate()
 		{
 			GetTickCountDelegate @delegate = (GetTickCountDelegate)typeof(GetTickCountDelegate)
@@ -53,10 +55,10 @@
 
 			uint result = @delegate.Invoke();
 
-			Assert.True(result == default);
+			Assert.IsTrue(result == default);
 		}
 
-		[Fact]
+		[TestMethod]
 		public void Test_GetEmptyDebugDelegate_AssertIsEmpty()
 		{
 			GetTickCountDelegate @delegate = (GetTickCountDelegate)typeof(GetTickCountDelegate)
@@ -64,10 +66,10 @@
 
 			uint result = @delegate.Invoke();
 
-			Assert.True(result == default);
+			Assert.IsTrue(result == default);
 		}
 
-		[PlatformSpecificFact(Platform.Windows)]
+		[PlatformSpecificTestMethod(Platform.Windows)]
 		public void Test_GetEmptyDebugDelegate_AssertIsFalse()
 		{
 			using (var lib = new NativeLibrary("kernel32.dll"))
@@ -79,7 +81,7 @@
 
 				uint result = @delegate.Invoke();
 
-				Assert.True(result != default);
+				Assert.IsTrue(result != default);
 			}
 		}
 
@@ -92,10 +94,10 @@
 			=> (methodName, isEmpty) => { };
 
 		public static UnmanagedCallback CallbackEmptyTrue
-			=> (methodName, isEmpty) => Assert.True(isEmpty);
+			=> (methodName, isEmpty) => Assert.IsTrue(isEmpty);
 
 		public static UnmanagedCallback CallbackEmptyFalse
-			=> (methodName, isEmpty) => Assert.False(isEmpty);
+			=> (methodName, isEmpty) => Assert.IsFalse(isEmpty);
 
 		private delegate uint GetTickCountDelegate();
 

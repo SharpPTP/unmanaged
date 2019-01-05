@@ -2,16 +2,13 @@
 
 	<PropertyGroup>
 		<TargetFramework>netcoreapp2.2</TargetFramework>
-		<AssemblyTitle>Unmanaged.Tests</AssemblyTitle>
-		<AssemblyName>Unmanaged.Tests</AssemblyName>
+		<AssemblyTitle>Unmanaged.MSTest.Tests</AssemblyTitle>
+		<AssemblyName>Unmanaged.MSTest.Tests</AssemblyName>
 		<Authors>Petar Petrov and contributors</Authors>
 		<IsPackable>false</IsPackable>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/SharpPTP/unmanaged</RepositoryUrl>
 		<LangVersion>latest</LangVersion>
-		<ApplicationIcon />
-		<OutputType>Library</OutputType>
-		<StartupObject />
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -21,8 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\src\Unmanaged\Unmanaged.csproj" />
-		<ProjectReference Include="..\..\src\Unmanaged.MSTest\Unmanaged.MSTest.csproj" />
+	  <ProjectReference Include="..\..\src\Unmanaged.MSTest\Unmanaged.MSTest.csproj" />
 	</ItemGroup>
 
 </Project>

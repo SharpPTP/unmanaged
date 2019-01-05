@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Unmanaged.XUnit
+namespace Unmanaged.MSTest
 {
 	/// <summary>
 	/// Represents an enumeration of platforms defined in <see cref="OSPlatform"/>.
@@ -9,6 +9,11 @@ namespace Unmanaged.XUnit
 	[Flags]
 	public enum Platform
 	{
+		/// <summary>
+		/// Unknown
+		/// </summary>
+		Unknown = 0,
+
 		/// <summary>
 		/// Linux
 		/// </summary>

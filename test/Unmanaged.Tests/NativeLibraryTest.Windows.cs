@@ -1,13 +1,13 @@
 namespace Unmanaged.Tests
 {
+	using Microsoft.VisualStudio.TestTools.UnitTesting;
 	using System;
-	using Xunit;
-	using XUnit;
+	using Unmanaged.MSTest;
 
 	public partial class NativeLibraryTest
 	{
-		[PlatformSpecificTheory(Platform.Windows)]
-		[InlineData("kernel32.dll")]
+		[PlatformSpecificDataTestMethod(Platform.Windows)]
+		[DataRow(new string[] { "kernel32.dll" })]
 		public void Test_NativeLibrary_Load_Windows(params string[] libraryNames)
 		{
 			using (new NativeLibrary(libraryNames))
@@ -15,35 +15,35 @@ namespace Unmanaged.Tests
 			}
 		}
 
-		[PlatformSpecificTheory(Platform.Windows)]
-		[InlineData("kernel32.dll", "GetTickCount")]
-		[InlineData("kernel32.dll", "GetProcAddress")]
-		[InlineData("kernel32.dll", "FreeLibrary")]
+		[PlatformSpecificDataTestMethod(Platform.Windows)]
+		[DataRow("kernel32.dll", "GetTickCount")]
+		[DataRow("kernel32.dll", "GetProcAddress")]
+		[DataRow("kernel32.dll", "FreeLibrary")]
 		public void Test_NativeLibrary_GetAddress_Windows(string windowsLibrary, string entryPoint)
 		{
 			using (var lib = new NativeLibrary(windowsLibrary))
 			{
 				IntPtr handle = lib.GetAddress(entryPoint);
 
-				Assert.True(handle != IntPtr.Zero);
+				Assert.IsTrue(handle != IntPtr.Zero);
 			}
 		}
 
-		[PlatformSpecificTheory(Platform.Windows)]
-		[InlineData("kernel32.dll", "GetTickCount", typeof(GetTickCountWindows))]
-		[InlineData("kernel32.dll", "GetProcAddress", typeof(GetProcAddressWindows))]
-		[InlineData("kernel32.dll", "FreeLibrary", typeof(FreeLibraryWindows))]
+		[PlatformSpecificDataTestMethod(Platform.Windows)]
+		[DataRow("kernel32.dll", "GetTickCount", typeof(GetTickCountWindows))]
+		[DataRow("kernel32.dll", "GetProcAddress", typeof(GetProcAddressWindows))]
+		[DataRow("kernel32.dll", "FreeLibrary", typeof(FreeLibraryWindows))]
 		public void Test_NativeLibrary_GetDelegate_Windows(string windowsLibrary, string entryPoint, Type delegateType)
 		{
 			using (var lib = new NativeLibrary(windowsLibrary))
 			{
 				Delegate @delegate = lib.GetDelegate(delegateType, entryPoint);
 
-				Assert.NotNull(@delegate);
+				Assert.IsNotNull(@delegate);
 			}
 		}
 
-		[PlatformSpecificFact(Platform.Windows)]
+		[PlatformSpecificTestMethod(Platform.Windows)]
 		public void Test_NativeLibrary_GetDelegateGeneric_Windows()
 		{
 			using (var lib = new NativeLibrary("kernel32.dll"))
@@ -51,8 +51,8 @@ namespace Unmanaged.Tests
 				GetProcAddressWindows @delegate = lib.GetDelegate<GetProcAddressWindows>("GetProcAddress");
 				FreeLibraryWindows @delegate1 = lib.GetDelegate<FreeLibraryWindows>("FreeLibrary");
 
-				Assert.NotNull(@delegate);
-				Assert.NotNull(@delegate1);
+				Assert.IsNotNull(@delegate);
+				Assert.IsNotNull(@delegate1);
 			}
 		}
 

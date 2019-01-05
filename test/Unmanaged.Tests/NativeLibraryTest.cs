@@ -1,15 +1,18 @@
 namespace Unmanaged.Tests
 {
+	using Microsoft.VisualStudio.TestTools.UnitTesting;
 	using System;
-	using Xunit;
 
+	[TestClass]
+	[TestCategory("Unmanaged")]
 	public partial class NativeLibraryTest
 	{
-		[InlineData("randomasdasdas.dll")]
-		[InlineData("randomasdasdas.so")]
+		[TestMethod]
+		[DataRow("randomasdasdas.dll")]
+		[DataRow("randomasdasdas.so")]
 		public void Test_NativeLibrary_NotFound(string library)
 		{
-			Assert.Throws<DllNotFoundException>(() => new NativeLibrary(library));
+			Assert.ThrowsException<DllNotFoundException>(() => new NativeLibrary(library));
 		}
 	}
 }

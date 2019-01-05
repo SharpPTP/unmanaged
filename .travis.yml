@@ -3,7 +3,8 @@ notifications:
 language: csharp
 solution: Unmanaged.sln
 mono: none
-dotnet: 2.1
+dotnet: 2.2
 script:
   - dotnet restore
-  - dotnet test test/Unmanaged.Tests/Unmanaged.Tests.csproj -c Release -f "netcoreapp2.1"
+  - dotnet test test/Unmanaged.Tests/Unmanaged.Tests.csproj -c Release -f "netcoreapp2.2"
+  - dotnet test test/Unmanaged.MSTest.Tests/Unmanaged.MSTest.Tests.csproj -c Release -f "netcoreapp2.2"

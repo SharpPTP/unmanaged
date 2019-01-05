@@ -1,13 +1,15 @@
 ﻿namespace Unmanaged.Tests
 {
+	using Microsoft.VisualStudio.TestTools.UnitTesting;
 	using System;
 	using System.Collections.Generic;
-	using Unmanaged.XUnit;
-	using Xunit;
+	using Unmanaged.MSTest;
 
+	[TestClass]
+	[TestCategory("Unmanaged")]
 	public class LoadFunctionsTest
 	{
-		[PlatformSpecificFact(Platform.Windows)]
+		[PlatformSpecificTestMethod(Platform.Windows)]
 		public void Test_LoadFunctions()
 		{
 			using (var lib = new NativeLibrary("kernel32.dll"))
@@ -15,14 +17,14 @@
 				ICollection<string> errors = typeof(TestKernel32Wrapper)
 					.LoadFunctions(lib.GetAddress);
 
-				Assert.True(errors.Count <= 0);
-				Assert.NotNull(TestKernel32Wrapper.KernelGetProcAddress);
-				Assert.NotNull(TestKernel32Wrapper.KernelFreeLibrary);
-				Assert.NotNull(TestKernel32Wrapper.KernelGetTickCount);
+				Assert.IsTrue(errors.Count <= 0);
+				Assert.IsNotNull(TestKernel32Wrapper.KernelGetProcAddress);
+				Assert.IsNotNull(TestKernel32Wrapper.KernelFreeLibrary);
+				Assert.IsNotNull(TestKernel32Wrapper.KernelGetTickCount);
 			}
 		}
 
-		[PlatformSpecificFact(Platform.Windows)]
+		[PlatformSpecificTestMethod(Platform.Windows)]
 		public void Test_LoadFunctions_OnCall()
 		{
 			using (var lib = new NativeLibrary("kernel32.dll"))
@@ -30,10 +32,10 @@
 				ICollection<string> errors = typeof(TestKernel32Wrapper)
 					.LoadFunctions(lib.GetAddress, () => Callback);
 
-				Assert.True(errors.Count <= 0);
-				Assert.NotNull(TestKernel32Wrapper.KernelGetProcAddress);
-				Assert.NotNull(TestKernel32Wrapper.KernelFreeLibrary);
-				Assert.NotNull(TestKernel32Wrapper.KernelGetTickCount);
+				Assert.IsTrue(errors.Count <= 0);
+				Assert.IsNotNull(TestKernel32Wrapper.KernelGetProcAddress);
+				Assert.IsNotNull(TestKernel32Wrapper.KernelFreeLibrary);
+				Assert.IsNotNull(TestKernel32Wrapper.KernelGetTickCount);
 			}
 		}
 
