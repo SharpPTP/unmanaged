@@ -1,10 +1,16 @@
 notifications:
-  email: false
+    email: false
 language: csharp
 solution: Unmanaged.sln
 mono: none
+sudo: required
+dist: xenial
 dotnet: 2.2
 script:
-  - dotnet restore
-  - dotnet test test/Unmanaged.Tests/Unmanaged.Tests.csproj -c Release -f "netcoreapp2.2"
-  - dotnet test test/Unmanaged.MSTest.Tests/Unmanaged.MSTest.Tests.csproj -c Release -f "netcoreapp2.2"
+    - dotnet restore
+    - dotnet build
+    - dotnet test test/Unmanaged.Tests/Unmanaged.Tests.csproj -c Release -f "netcoreapp2.2"
+    - dotnet test test/Unmanaged.MSTest.Tests/Unmanaged.MSTest.Tests.csproj -c Release -f "netcoreapp2.2"
+global:
+    - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
+    - DOTNET_CLI_TELEMETRY_OPTOUT=1
