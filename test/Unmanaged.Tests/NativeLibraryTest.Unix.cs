@@ -3,11 +3,11 @@ namespace Unmanaged.Tests
 	using Microsoft.VisualStudio.TestTools.UnitTesting;
 	using System;
 	using Unmanaged.MSTest;
-	
+
 	public partial class NativeLibraryTest
 	{
 		[PlatformSpecificDataTestMethod(Platform.Unix)]
-		[DataRow("libc.so", "libc.so.6")]
+		[DataRow(new string[] { "libc.so", "libc.so.6" })]
 		public void Test_NativeLibrary_Load_Unix(params string[] libraryNames)
 		{
 			using (new NativeLibrary(libraryNames))
