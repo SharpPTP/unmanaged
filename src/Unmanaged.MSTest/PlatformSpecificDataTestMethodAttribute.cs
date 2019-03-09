@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Unmanaged.MSTest
+﻿namespace Unmanaged.MSTest
 {
+	using System;
+
 	/// <summary>
 	/// Attribute that is applied to a method to indicate that it is a fact that should be run
 	/// by the test runner only on a specific platform.

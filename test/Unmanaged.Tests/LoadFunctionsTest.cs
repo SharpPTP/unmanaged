@@ -3,39 +3,57 @@
 	using Microsoft.VisualStudio.TestTools.UnitTesting;
 	using System;
 	using System.Collections.Generic;
+	using System.Runtime.InteropServices;
 	using Unmanaged.MSTest;
 
 	[TestClass]
 	[TestCategory("Unmanaged")]
 	public class LoadFunctionsTest
 	{
+
 		[PlatformSpecificTestMethod(Platform.Windows)]
 		public void Test_LoadFunctions()
 		{
-			using (var lib = new NativeLibrary("kernel32.dll"))
+			IntPtr libraryHandle = IntPtr.Zero;
+
+			try
 			{
+				libraryHandle = NativeLibrary.Load("kernel32.dll");
+
 				ICollection<string> errors = typeof(TestKernel32Wrapper)
-					.LoadFunctions(lib.GetAddress);
+					.LoadFunctions(libraryHandle);
 
 				Assert.IsTrue(errors.Count <= 0);
 				Assert.IsNotNull(TestKernel32Wrapper.KernelGetProcAddress);
 				Assert.IsNotNull(TestKernel32Wrapper.KernelFreeLibrary);
 				Assert.IsNotNull(TestKernel32Wrapper.KernelGetTickCount);
 			}
+			finally
+			{
+				NativeLibrary.Free(libraryHandle);
+			}
 		}
 
 		[PlatformSpecificTestMethod(Platform.Windows)]
 		public void Test_LoadFunctions_OnCall()
 		{
-			using (var lib = new NativeLibrary("kernel32.dll"))
+			IntPtr libraryHandle = IntPtr.Zero;
+
+			try
 			{
+				libraryHandle = NativeLibrary.Load("kernel32.dll");
+
 				ICollection<string> errors = typeof(TestKernel32Wrapper)
-					.LoadFunctions(lib.GetAddress, () => Callback);
+					.LoadFunctions(libraryHandle, () => Callback);
 
 				Assert.IsTrue(errors.Count <= 0);
 				Assert.IsNotNull(TestKernel32Wrapper.KernelGetProcAddress);
 				Assert.IsNotNull(TestKernel32Wrapper.KernelFreeLibrary);
 				Assert.IsNotNull(TestKernel32Wrapper.KernelGetTickCount);
+			}
+			finally
+			{
+				NativeLibrary.Free(libraryHandle);
 			}
 		}
 
@@ -46,7 +64,6 @@
 
 		private static class TestKernel32Wrapper
 		{
-			[LoadFunction("GetProcAddress")]
 			public static GetProcAddressDelegate KernelGetProcAddress = null;
 
 			[LoadFunction("FreeLibrary")]

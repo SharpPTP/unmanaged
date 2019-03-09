@@ -34,11 +34,12 @@
 		/// Loads all unmanaged functions of provided type.
 		/// </summary>
 		/// <param name="type">The type</param>
-		/// <param name="methodHandleFactory">The function that retrieves the handle</param>
+		/// <param name="libraryHandle">the library handle</param>
 		/// <param name="expression">The on function call event</param>
 		/// <returns>returns a collection of error string</returns>
-		public static ICollection<string> LoadFunctions(this Type type,
-			Func<string, IntPtr> methodHandleFactory,
+		public static ICollection<string> LoadFunctions(
+			this Type type,
+			IntPtr libraryHandle,
 			Expression<Func<UnmanagedCallback>> expression)
 		{
 			if (type == null)
@@ -46,9 +47,9 @@
 				throw new ArgumentNullException(nameof(type));
 			}
 
-			if (methodHandleFactory == null)
+			if (libraryHandle == IntPtr.Zero)
 			{
-				throw new ArgumentNullException(nameof(methodHandleFactory));
+				throw new ArgumentException("Invalid library handle.", nameof(libraryHandle));
 			}
 
 			if (expression == null)
@@ -64,7 +65,7 @@
 
 			foreach (FieldInfo field in fields)
 			{
-				if (!UnmanagedHelper.TryGetFunction(field, methodHandleFactory, expression, out Delegate @delegate))
+				if (!UnmanagedHelper.TryGetFunction(field, libraryHandle, expression, out Delegate @delegate))
 				{
 					LoadFunctionAttribute attribute = field.GetCustomAttribute<LoadFunctionAttribute>();
 
@@ -81,20 +82,20 @@
 		/// Loads all unmanaged functions of provided type and binding flags.
 		/// </summary>
 		/// <param name="type">The type</param>
-		/// <param name="methodHandleFactory">The function that retrieves the handle</param>
+		/// <param name="libraryHandle">the library handle</param>
 		/// <returns>returns a collection of error string</returns>
 		public static ICollection<string> LoadFunctions(
 			this Type type,
-			Func<string, IntPtr> methodHandleFactory)
+			IntPtr libraryHandle)
 		{
 			if (type == null)
 			{
 				throw new ArgumentNullException(nameof(type));
 			}
 
-			if (methodHandleFactory == null)
+			if (libraryHandle == IntPtr.Zero)
 			{
-				throw new ArgumentNullException(nameof(methodHandleFactory));
+				throw new ArgumentException("Invalid library handle.", nameof(libraryHandle));
 			}
 
 			var errors = new List<string>();
@@ -105,7 +106,7 @@
 
 			foreach (FieldInfo field in fields)
 			{
-				if (!UnmanagedHelper.TryGetFunction(field, methodHandleFactory, out Delegate @delegate))
+				if (!UnmanagedHelper.TryGetFunction(field, libraryHandle, out Delegate @delegate))
 				{
 					LoadFunctionAttribute attribute = field.GetCustomAttribute<LoadFunctionAttribute>();
 

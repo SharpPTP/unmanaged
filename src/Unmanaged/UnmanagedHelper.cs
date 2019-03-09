@@ -9,7 +9,7 @@
 	{
 		public static bool TryGetFunction(
 			FieldInfo field,
-			Func<string, IntPtr> handleFactory,
+			IntPtr libraryHandle,
 			Expression<Func<UnmanagedCallback>> expression,
 			out Delegate @delegate)
 		{
@@ -18,19 +18,19 @@
 				throw new ArgumentNullException(nameof(field));
 			}
 
-			if (handleFactory == null)
-			{
-				throw new ArgumentNullException(nameof(handleFactory));
-			}
-
 			if (expression == null)
 			{
 				throw new ArgumentNullException(nameof(expression));
 			}
 
+			if (libraryHandle == IntPtr.Zero)
+			{
+				throw new ArgumentException("Invalid library handle.", nameof(libraryHandle));
+			}
+
 			LoadFunctionAttribute attribute = field.GetCustomAttribute<LoadFunctionAttribute>();
 
-			IntPtr methodHandle = handleFactory.Invoke(attribute.EntryPoint);
+			IntPtr methodHandle = NativeLibrary.GetExport(libraryHandle, attribute.EntryPoint);
 
 			if (methodHandle == IntPtr.Zero)
 			{
@@ -51,7 +51,7 @@
 
 		public static bool TryGetFunction(
 			FieldInfo field,
-			Func<string, IntPtr> handleFactory,
+			IntPtr libraryHandle,
 			out Delegate @delegate)
 		{
 			if (field == null)
@@ -59,14 +59,14 @@
 				throw new ArgumentNullException(nameof(field));
 			}
 
-			if (handleFactory == null)
+			if (libraryHandle == IntPtr.Zero)
 			{
-				throw new ArgumentNullException(nameof(handleFactory));
+				throw new ArgumentException("Invalid library handle.", nameof(libraryHandle));
 			}
 
 			LoadFunctionAttribute attribute = field.GetCustomAttribute<LoadFunctionAttribute>();
 
-			IntPtr methodHandle = handleFactory.Invoke(attribute.EntryPoint);
+			IntPtr methodHandle = NativeLibrary.GetExport(libraryHandle, attribute.EntryPoint);
 
 			if (methodHandle != IntPtr.Zero)
 			{

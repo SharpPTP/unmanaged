@@ -1,10 +1,14 @@
 $scriptPath = Split-Path -Parent $PSCommandPath
 $deployPath = Join-Path -Path $scriptPath -ChildPath ".deploy"
-$packagesPath = Join-Path -Path $scriptPath -ChildPath ".deploy\packages"
 
-Write-Host "Clearing deploy folder" | Remove-Item -Recurse -Force $deployPath
+Write-Host "Clearing deploy folder: $deployPath"
+Remove-Item $deployPath -Recurse -Force
 
-Write-Host "Testing" | dotnet test test/Unmanaged.Tests/Unmanaged.Tests.csproj -c Release
-Write-Host "Testing" | dotnet test test/Unmanaged.MSTest.Tests/Unmanaged.MSTest.Tests.csproj -c Release
+Write-Host "Testing unmanaged"
+dotnet test test/Unmanaged.Tests/Unmanaged.Tests.csproj -c Release
 
-Write-Host "Deploying nuget packages" | dotnet pack -o $packagesPath
+Write-Host "Testing unmanaged MSTests"
+dotnet test test/Unmanaged.MSTest.Tests/Unmanaged.MSTest.Tests.csproj -c Release
+
+Write-Host "Deploying packages"
+dotnet pack -o $deployPath

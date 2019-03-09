@@ -2,6 +2,7 @@
 {
 	using Microsoft.VisualStudio.TestTools.UnitTesting;
 	using System;
+	using System.Runtime.InteropServices;
 	using Unmanaged.MSTest;
 
 	[TestClass]
@@ -11,23 +12,35 @@
 		[PlatformSpecificTestMethod(Platform.Windows)]
 		public void Test_GetDebugDelegate_Throws()
 		{
-			using (var lib = new NativeLibrary("kernel32.dll"))
+			IntPtr libraryHandle = IntPtr.Zero;
+
+			try
 			{
-				IntPtr methodHandle = lib.GetAddress("GetTickCount");
+				libraryHandle = NativeLibrary.Load("kernel32.dll");
+
+				IntPtr methodHandle = NativeLibrary.GetExport(libraryHandle, "GetTickCount");
 
 				GetTickCountDelegate @delegate = (GetTickCountDelegate)methodHandle
 					.GetDebugDelegate(typeof(GetTickCountDelegate), () => CallbackThrows);
 
 				Assert.ThrowsException<UnmanagedCallbackTestException>(() => @delegate.Invoke());
 			}
+			finally
+			{
+				NativeLibrary.Free(libraryHandle);
+			}
 		}
 
 		[PlatformSpecificTestMethod(Platform.Windows)]
 		public void Test_GetDebugDelegate()
 		{
-			using (var lib = new NativeLibrary("kernel32.dll"))
+			IntPtr libraryHandle = IntPtr.Zero;
+
+			try
 			{
-				IntPtr methodHandle = lib.GetAddress("GetTickCount");
+				libraryHandle = NativeLibrary.Load("kernel32.dll");
+
+				IntPtr methodHandle = NativeLibrary.GetExport(libraryHandle, "GetTickCount");
 
 				GetTickCountDelegate @delegate = (GetTickCountDelegate)methodHandle
 					.GetDebugDelegate(typeof(GetTickCountDelegate), () => Callback);
@@ -35,6 +48,10 @@
 				uint result = @delegate.Invoke();
 
 				Assert.IsTrue(result != default);
+			}
+			finally
+			{
+				NativeLibrary.Free(libraryHandle);
 			}
 		}
 
@@ -72,9 +89,13 @@
 		[PlatformSpecificTestMethod(Platform.Windows)]
 		public void Test_GetEmptyDebugDelegate_AssertIsFalse()
 		{
-			using (var lib = new NativeLibrary("kernel32.dll"))
+			IntPtr libraryHandle = IntPtr.Zero;
+
+			try
 			{
-				IntPtr methodHandle = lib.GetAddress("GetTickCount");
+				libraryHandle = NativeLibrary.Load("kernel32.dll");
+
+				IntPtr methodHandle = NativeLibrary.GetExport(libraryHandle, "GetTickCount");
 
 				GetTickCountDelegate @delegate = (GetTickCountDelegate)methodHandle
 					.GetDebugDelegate(typeof(GetTickCountDelegate), () => CallbackEmptyFalse);
@@ -82,6 +103,10 @@
 				uint result = @delegate.Invoke();
 
 				Assert.IsTrue(result != default);
+			}
+			finally
+			{
+				NativeLibrary.Free(libraryHandle);
 			}
 		}
 

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp2.2</TargetFramework>
+		<TargetFramework>netcoreapp3.0</TargetFramework>
 		<AssemblyTitle>Unmanaged.Tests</AssemblyTitle>
 		<AssemblyName>Unmanaged.Tests</AssemblyName>
 		<Authors>Petar Petrov and contributors</Authors>
@@ -9,9 +9,6 @@
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/SharpPTP/unmanaged</RepositoryUrl>
 		<LangVersion>latest</LangVersion>
-		<ApplicationIcon />
-		<OutputType>Library</OutputType>
-		<StartupObject />
 	</PropertyGroup>
 
 	<ItemGroup>

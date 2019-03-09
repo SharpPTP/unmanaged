@@ -1,9 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Runtime.InteropServices;
-
-namespace Unmanaged.MSTest
+﻿namespace Unmanaged.MSTest
 {
+	using Microsoft.VisualStudio.TestTools.UnitTesting;
+	using System;
+	using System.Runtime.InteropServices;
+
 	/// <summary>
 	/// Attribute that is applied to a method to indicate that it is a fact that should be run
 	/// by the test runner only on a specific platform.

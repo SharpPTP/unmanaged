@@ -1,8 +1,8 @@
-﻿using System;
-using System.Runtime.InteropServices;
-
-namespace Unmanaged.MSTest
+﻿namespace Unmanaged.MSTest
 {
+	using System;
+	using System.Runtime.InteropServices;
+
 	/// <summary>
 	/// Represents an enumeration of platforms defined in <see cref="OSPlatform"/>.
 	/// </summary>

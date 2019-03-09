@@ -18,7 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\src\Unmanaged.MSTest\Unmanaged.MSTest.csproj" />
+		<ProjectReference Include="..\..\src\Unmanaged.MSTest\Unmanaged.MSTest.csproj" />
 	</ItemGroup>
 
 </Project>
